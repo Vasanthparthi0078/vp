@@ -3,7 +3,7 @@ services:
   vprodb:
     image: vprocontainers/vprofiledb
     build:
-      context: ./javaapi
+      context: .
     ports:
       - "3306:3306"
     volumes:
