@@ -1,40 +1,35 @@
 version: '3.8'
 services:
-  vprodb:
-    image: vprocontainers/vprofiledb
+  onlinebookstore:
     build:
       context: .
+      dockerfile: Docker-files/db/Dockerfile
+    image: vasanth/onlinebookstore_app:db_img
+    container_name: onlinebookstore
     ports:
       - "3306:3306"
     volumes:
-      - vprodbdata:/var/lib/mysql
+      - onlinebookstoredbdata:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=vprodbpass
-
-  vprocache01:
-    image: memcached
-    ports:
-      - "11211:11211"
-
-  vpromq01:
-    image: rabbitmq
-    ports:
-      - "15672:15672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-
-  vproapp:
-    image: vprocontainers/vprofileapp
+      - MYSQL_ROOT_PASSWORD=admin123
+  onlinebookstoreapp:
+    build:
+      context: .
+      dockerfile: Docker-files/app/Dockerfile
+    image: vasanth/onlinebookstore_app:app_img
+    container_name: onlinebookstoreapp
     ports:
       - "8080:8080"
     volumes: 
-      - vproappdata:/usr/local/tomcat/webapps
-
-  vproweb:
-    image: vprocontainers/vprofileweb
+      - onlinebookstoreappdata:/usr/local/tomcat/webapps
+  onlinebookstoreweb:
+    build:
+      context: .
+      dockerfile: Docker-files/web/Dockerfile
+    image: vasanth/onlinebookstore_app:web_img
+    container_name: onlinebookstoreweb
     ports:
       - "80:80"
 volumes:
-  vprodbdata: {}
-  vproappdata: {}
+  onlinebookstoredbdata: {}
+  onlinebookstoreappdata: {}
